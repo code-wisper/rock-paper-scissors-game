@@ -1,0 +1,547 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* --------- colors ----------- */
+  --clr-paper-1: hsl(230, 89%, 62%);
+  --clr-paper-2: hsl(230, 89%, 65%);
+  --clr-rock-1: hsl(349, 71%, 52%);
+  --clr-rock-2: hsl(349, 70%, 56%);
+  --clr-scissors-1: hsl(39, 89%, 49%);
+  --clr-scissors-2: hsl(40, 84%, 53%);
+  --clr-bg-1: hsl(214, 47%, 23%);
+  --clr-bg-2: hsl(237, 49%, 15%);
+  --clr-white: hsl(0, 100%, 98%);
+  --clr-dark: hsl(229, 25%, 31%);
+  --clr-score: hsl(229, 64%, 46%);
+  --clr-header: hsl(217, 16%, 45%);
+
+  /* ------ Box shadows ---- */
+  --shadow-light: hsla(0, 0%, 0%, 0.149);
+  --shadow-med: hsla(0, 0%, 0%, 0.302);
+
+  /* ------------- typography ----------- */
+  --ff-barlowCond: "Barlow Condensed", sans-serif;
+
+  --fs-big: 1.2rem;
+  --fs-normal: 2.3rem;
+  --fs-small: 1rem;
+  --fs-scoreNumber: 3rem;
+  --fs-scoreTitle: 0.9rem;
+}
+
+@media only screen and (min-width: 48em) {
+  :root {
+    --fs-big: 1.5rem;
+    --fs-normal: 3.5rem;
+    --fs-small: 1.3rem;
+    --fs-scoreNumber: 4rem;
+    --fs-scoreTitle: 1.1rem;
+  }
+}
+
+/* ----------- General Styling ------ */
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--ff-barlowCond);
+  background: radial-gradient(at top, var(--clr-bg-1), var(--clr-bg-2));
+  min-height: 100vh;
+  color: var(--clr-white);
+  text-transform: uppercase;
+  overflow: hidden;
+}
+
+/* ------- Main Section -------- */
+.container {
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+  padding-block-start: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 120px;
+  border: 3px solid var(--clr-header);
+  border-radius: 10px;
+  padding: 1rem 1.3rem 1rem 1.5rem;
+}
+
+.logo img {
+  height: 100%;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--clr-white);
+  border-radius: 7px;
+  width: 120px;
+  height: 100%;
+  margin-left: 1rem;
+  line-height: 1;
+  /* padding: 1.2rem; */
+}
+
+.score__title {
+  font-size: var(--fs-scoreTitle);
+  letter-spacing: 0.1em;
+  color: var(--clr-score);
+}
+
+.score__number {
+  font-size: var(--fs-scoreNumber);
+  font-weight: 700;
+  color: var(--clr-dark);
+}
+
+/* ---- Game section ---- */
+.game {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas:
+    "paper scissors"
+    "rock rock";
+  place-items: center;
+  height: 25rem;
+  padding-block-start: 3.5rem;
+}
+
+.game::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 20%;
+  top: 30%;
+  background: url(/images/bg-triangle.svg);
+  background-repeat: no-repeat;
+  background-size: 60%;
+  z-index: -1;
+}
+
+.choice-btn {
+  outline: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.choice {
+  position: relative;
+  width: 6rem;
+  height: 6rem;
+  background: #fff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 0.3rem var(--shadow-light);
+}
+
+.choice::before,
+.choice::after {
+  content: "";
+  position: absolute;
+  top: -15%;
+  left: -15%;
+  width: 130%;
+  height: 130%;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.choice::after {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.choice-btn:focus .choice::after {
+  opacity: 1;
+  box-shadow: 0 0 0 2rem hsl(218, 41%, 23%);
+  z-index: -2;
+}
+
+.choice.paper::before {
+  background: linear-gradient(
+    to bottom,
+    var(--clr-paper-1),
+    var(--clr-paper-2)
+  );
+  box-shadow: 0 0.3rem var(--shadow-med), 0 0.3rem var(--clr-paper-2);
+}
+.choice.scissors::before {
+  background: linear-gradient(
+    to bottom,
+    var(--clr-scissors-1),
+    var(--clr-scissors-2)
+  );
+  box-shadow: 0 0.3rem var(--shadow-med), 0 0.3rem var(--clr-scissors-2);
+}
+.choice.rock::before {
+  background: linear-gradient(to bottom, var(--clr-rock-1), var(--clr-rock-2));
+  box-shadow: 0 0.3rem var(--shadow-med), 0 0.3rem var(--clr-rock-2);
+}
+
+.choice-btn[data-choice="paper"] {
+  grid-area: paper;
+}
+.choice-btn[data-choice="scissors"] {
+  grid-area: scissors;
+}
+.choice-btn[data-choice="rock"] {
+  grid-area: rock;
+}
+
+/* --------------- Results Section -------------- */
+.results {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-items: center;
+  grid-template-areas:
+    "you-title ai-title"
+    "you-picked ai-picked";
+
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.results__heading {
+  font-size: var(--fs-big);
+  letter-spacing: 0.1em;
+  padding: 3rem 0 2rem;
+  color: var(--clr-white);
+}
+
+.results__result {
+  min-width: 6rem;
+  min-height: 6rem;
+  background: #16213d;
+  border-radius: 50%;
+  transform: scale(1.2);
+  z-index: -1;
+}
+
+.results__heading:first-of-type {
+  grid-area: you-title;
+}
+
+.results__heading:last-of-type {
+  grid-area: ai-title;
+}
+
+.results__result:first-of-type {
+  grid-area: you-picked;
+}
+
+.results__result:last-of-type {
+  grid-area: ai-picked;
+}
+
+.results.show-winner {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3);
+  grid-template-areas:
+    "you-picked  ai-picked"
+    "you-title  ai-title"
+    "result-winner result-winner";
+}
+
+.winner .choice::after {
+  box-shadow: 0 0 0 5px #293251, 0 0 0 7px #232c4b, 0 0 0 12px #1e2949;
+  animation: winner 1s ease forwards;
+}
+
+@keyframes winner {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.results__winner {
+  grid-area: result-winner;
+  display: grid;
+  place-items: center;
+}
+
+.results__text {
+  font-size: var(--fs-normal);
+  padding-bottom: 1.3rem;
+}
+
+.play-again {
+  background: #fff;
+  border: 2px solid transparent;
+  outline: none;
+  border-radius: 0.6rem;
+  color: var(--clr-dark);
+  padding: 0.6rem 3.5rem;
+  font-family: inherit;
+  text-transform: inherit;
+  font-size: var(--fs-small);
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.play-again:focus {
+  border: 2px solid var(--clr-header);
+}
+
+/* ---------- Rules Button ------ */
+.rules-container {
+  position: absolute;
+  bottom: 4rem;
+  right: 2rem;
+}
+
+.rules-btn {
+  background: none;
+  outline: none;
+  border: 2px solid var(--clr-header);
+  border-radius: 0.6rem;
+  color: var(--clr-white);
+  padding: 0.6rem 2.5rem;
+  font-family: inherit;
+  text-transform: uppercase;
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.rules-btn:focus {
+  border: 2px solid #fff;
+}
+
+/* -------- Rules Modal ----- */
+.modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  background: var(--shadow-med);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.modal__heading {
+  font-size: var(--fs-big);
+  color: var(--clr-dark);
+}
+
+.close-btn {
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+}
+
+.show-modal {
+  opacity: 1;
+  pointer-events: initial;
+}
+
+/* ------- Footer ------- */
+
+.footer {
+  position: absolute;
+  bottom: 1rem;
+  width: 100%;
+  padding: 0 2rem;
+  text-align: center;
+}
+
+.attribution {
+  font-size: 13px;
+  text-align: center;
+}
+.attribution a {
+  color: hsl(228, 45%, 44%);
+}
+
+/* ------------------- MEDIA QUERIES --------------------------- */
+
+@media only screen and (max-width: 40em) {
+  .logo {
+    width: 110px;
+    height: auto;
+  }
+
+  .rules-container {
+    position: absolute;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Results styles */
+  .results__result {
+    margin-top: 4rem;
+  }
+
+  /* ------- Modal ------ */
+
+  .modal__container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal__heading {
+    position: absolute;
+    top: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .close-btn {
+    position: absolute;
+    bottom: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media only screen and (min-width: 48em) {
+  .container {
+    max-width: 700px;
+  }
+
+  .header {
+    height: 150px;
+    border-radius: 20px;
+    padding: 1rem 1.4rem 1rem 2rem;
+  }
+
+  .score {
+    width: 150px;
+    height: 100%;
+    border-radius: 10px;
+  }
+
+  .choice {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .choice img {
+    transform: scale(1.5);
+  }
+
+  /* ------- Game Section ----- */
+  .game {
+    height: 30rem;
+    padding-block-start: 4rem;
+  }
+
+  .game::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 28%;
+    top: 35%;
+    background: url(/images/bg-triangle.svg);
+    background-repeat: no-repeat;
+    z-index: -1;
+  }
+
+  /* --------- Results Section ------- */
+  .results {
+    max-width: 1000px;
+  }
+
+  .results__heading {
+    padding: 4rem 0 6rem;
+  }
+
+  .results__result {
+    min-width: 10rem;
+    min-height: 10rem;
+    transform: scale(1.4);
+  }
+
+  .results.show-winner {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-areas:
+      "you-title . ai-title"
+      "you-picked result-winner ai-picked";
+  }
+
+  .winner .choice::after {
+    box-shadow: 0 0 0 40px #293251, 0 0 0 80px #232c4b, 0 0 0 130px #1e2949;
+    animation: winner 1s ease forwards;
+  }
+
+  .play-again {
+    padding: 0.6rem 3.5rem;
+  }
+
+  /* Rules Modal */
+
+  .modal__container {
+    background: #fff;
+    border-radius: 0.5rem;
+  }
+
+  .modal__header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 2rem 2rem 1rem;
+  }
+
+  .rules-image {
+    padding: 2rem 4rem;
+  }
+
+  /* Footer */
+  .footer {
+    left: -15rem;
+  }
+}
+
+/* --------- Utilities ---------- */
+.preload * {
+  transition: none;
+}
+
+.hidden {
+  display: none;
+}
